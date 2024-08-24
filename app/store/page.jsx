@@ -1,17 +1,19 @@
 import dynamic from 'next/dynamic'
 
-const Scene = dynamic(() => import('@/components/Scene'), {
+const StoreScene = dynamic(() => import('@/components/StoreScene'), {
   // loading: () => <p>Loading...</p>,
   ssr: false
 })
 
-const Home = () => {
+const Store = () => {
   return (
+    <>
       <main className="relative h-screen">
-        <Scene />
+        <StoreScene />
         {/* <div>Hello</div> */}
       </main>
+    </>
   );
 };
 
-export default Home;
+export default Store;

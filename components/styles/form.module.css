@@ -1,0 +1,184 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(4, 150px);
+  grid-gap: 4px;
+}
+
+.box {
+  position: relative;
+  width: 100%;
+  height: 150px;
+  background: rgba(45, 45, 45, 1);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box::before {
+  content: "";
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+  transform: translate(-50%, -50%);
+  background: radial-gradient(var(--clr), transparent, transparent);
+  width: 300px;
+  height: 300px;
+  transition: 0.5s, top 0.1s, left 0.1s;
+}
+
+.box::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  background: rgba(45, 45, 45, 0.9);
+}
+
+.formContainer {
+  position: absolute;
+  width: 450px;
+  height: 600px;
+  padding: 20px 10px;
+  text-align: center;
+  pointer-events: none;
+}
+.formContainer h2 {
+  color: #fff;
+  font-size: 2em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  pointer-events: all;
+}
+
+.formContainer .inputBox {
+  position: relative;
+  width: 100%;
+  margin-top: 30px;
+  pointer-events: all;
+}
+
+.formContainer .inputBox input {
+  width: 100%;
+  padding: 15px 20px;
+  outline: none;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid #000;
+  backdrop-filter: blur(10px);
+  color: #fff;
+  font-size: 1em;
+  letter-spacing: 0.1em;
+}
+
+.formContainer .inputBox textarea {
+  width: 100%;
+  height: 200px;
+  box-sizing: border-box;
+  overflow: auto;
+  resize: none;
+  line-height: 1.5;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 20px 25px;
+  outline: none;
+  border-radius: 10px;
+  border: 1px solid #000;
+  backdrop-filter: blur(10px);
+  color: #fff;
+  font-size: 1em;
+  letter-spacing: 0.1em;
+}
+
+.formContainer .inputBox span {
+  position: absolute;
+  left: 0;
+  font-size: 0.8em;
+  padding: 15px 20px;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 4px;
+  transition: 0.25s;
+  pointer-events: none;
+}
+
+.formContainer .inputBox input:focus ~ span,
+.formContainer .inputBox input:valid ~ span,
+.formContainer .inputBox textarea:focus ~ span,
+.formContainer .inputBox textarea:valid ~ span {
+  transform: translate(15px, -10px);
+  font-size: 0.75em;
+  background: #fff;
+  color: #222;
+  padding: 2px 5px;
+  border: 1px solid #000;
+}
+.formContainer .inputBox input[type="submit"] {
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: 500;
+  transform: 0.25s;
+  text-transform: uppercase;
+}
+.formContainer .inputBox input[type="submit"]:hover {
+  background: #f44336;
+  color: #222;
+  border: none;
+}
+
+@media (max-width: 480px) {
+  .container {
+    display: grid;
+    grid-template-columns: repeat(4, 80px);
+    grid-gap: 4px;
+  }
+  
+  .box {
+    width: 100%;
+    height: 150px;
+  }
+  
+  .box::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  .formContainer .inputBox input {
+    width: 70%;
+    padding: 15px 20px;
+
+    letter-spacing: 0.1em;
+  }
+
+  .formContainer .inputBox textarea {
+    width: 70%;
+    height: 200px;
+    font-size: 1em;
+    letter-spacing: 0.1em;
+  }
+
+  .formContainer .inputBox span {
+    position: absolute;
+    left: 0;
+    font-size: 0.8em;
+    padding: 5px 8px;
+    letter-spacing: 0.1em;
+    border-radius: 4px;
+    transition: 0.25s;
+    pointer-events: none;
+    margin: 10px 80px;
+  }
+
+  .formContainer .inputBox input:focus ~ span,
+  .formContainer .inputBox input:valid ~ span,
+  .formContainer .inputBox textarea:focus ~ span,
+  .formContainer .inputBox textarea:valid ~ span {
+    transform: translate(15px, -10px);
+    font-size: 0.75em;
+    background: #fff;
+    color: #222;
+    padding: 2px 5px;
+    margin: 0px 60px;
+    border: 1px solid #000;
+  }
+}
