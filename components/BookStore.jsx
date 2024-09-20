@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Html, useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
+import { useThree } from "@react-three/fiber";
 
 const modelPath = "./assets/models/bookStore-transformed.glb";
 
@@ -123,21 +124,23 @@ export function BookStore({ html, ...props }) {
   const [showNotebook14, setShowNotebook14] = useState(false);
   const [showNotebook15, setShowNotebook15] = useState(false);
 
-  const numberOfNotebooks = 14;
+  const numberOfNotebooks = 15;
 
   const notebooks = [];
 
   for (let i = 1; i <= numberOfNotebooks; i++) {
     notebooks.push({
       name: `notebook${i}`,
-      position: i > 7 ? [0.173, 0.583 + (2 * (i%7) * 0.014), 0.119] : [0.425, 0.583 + (2 * i * 0.014), 0.119],
+      position:
+        i > 7
+          ? [0.173, 0.583 + 2 * (i % 7) * 0.014, 0.119]
+          : [0.425, 0.583 + 2 * i * 0.014, 0.119],
       rotation: [0, 0, -0.011],
       scale: [0.102, 0.013, 0.137],
       showState: eval(`showNotebook${i}`), // Dynamically access the state variable
       setShowState: eval(`setShowNotebook${i}`), // Dynamically access the state setter
     });
   }
-  
 
   useEffect(() => {
     if (loggedIn) {
@@ -162,6 +165,30 @@ export function BookStore({ html, ...props }) {
     }
   }, [loggedIn, names, actions]);
 
+  // Raycasting
+  const { camera, gl, scene } = useThree();
+  const raycaster = useRef(new THREE.Raycaster());
+  const pointer = useRef(new THREE.Vector2());
+
+  const handleClick = (event) => {
+    pointer.current.x = (event.clientX / window.innerWidth) * 2 - 1;
+    pointer.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.current.setFromCamera(pointer.current, camera);
+
+    // Get all intersected objects sorted by distance
+    const intersects = raycaster.current.intersectObjects(scene.children);
+
+    if (intersects.length > 0) {
+      // Only consider the first intersect (the closest)
+      const firstObject = intersects[0].object;
+      console.log("Clicked on:", firstObject);
+      firstObject.parent.setShowState((prev) => !prev)
+    }
+
+    event.stopPropagation();
+  };
+
   return (
     <>
       {!loggedIn && (
@@ -172,7 +199,7 @@ export function BookStore({ html, ...props }) {
           }}
         />
       )}
-      <group ref={model} {...props} dispose={null}>
+      <group ref={model} {...props} dispose={null} onClick={handleClick}>
         <group name="Scene">
           <mesh
             name="almirah"
@@ -251,40 +278,40 @@ export function BookStore({ html, ...props }) {
                 <ShowDescription text={`${notebook.name}!`} />
               )}
               <mesh
-              name="Cube022"
-              castShadow
-              receiveShadow
-              geometry={nodes.Cube022.geometry}
-              material={materials.notebook}
-            />
-            <mesh
-              name="Cube022_1"
-              castShadow
-              receiveShadow
-              geometry={nodes.Cube022_1.geometry}
-              material={materials.spring}
-            />
-            <mesh
-              name="Cube022_2"
-              castShadow
-              receiveShadow
-              geometry={nodes.Cube022_2.geometry}
-              material={materials.notes}
-            />
-            <mesh
-              name="Cube022_3"
-              castShadow
-              receiveShadow
-              geometry={nodes.Cube022_3.geometry}
-              material={materials.pages}
-            />
-            <mesh
-              name="Cube022_4"
-              castShadow
-              receiveShadow
-              geometry={nodes.Cube022_4.geometry}
-              material={materials.pages}
-            />
+                name="Cube022"
+                castShadow
+                receiveShadow
+                geometry={nodes.Cube022.geometry}
+                material={materials.notebook}
+              />
+              <mesh
+                name="Cube022_1"
+                castShadow
+                receiveShadow
+                geometry={nodes.Cube022_1.geometry}
+                material={materials.spring}
+              />
+              <mesh
+                name="Cube022_2"
+                castShadow
+                receiveShadow
+                geometry={nodes.Cube022_2.geometry}
+                material={materials.notes}
+              />
+              <mesh
+                name="Cube022_3"
+                castShadow
+                receiveShadow
+                geometry={nodes.Cube022_3.geometry}
+                material={materials.pages}
+              />
+              <mesh
+                name="Cube022_4"
+                castShadow
+                receiveShadow
+                geometry={nodes.Cube022_4.geometry}
+                material={materials.pages}
+              />
             </group>
           ))}
         </group>

@@ -1,3 +1,4 @@
+
 import dynamic from 'next/dynamic'
 
 const StoreScene = dynamic(() => import('@/components/StoreScene'), {
